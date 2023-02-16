@@ -1,6 +1,8 @@
-import { render, screen } from '@testing-library/react';
-import Users from './Users';
 import axios from 'axios';
+import { render, screen } from '@testing-library/react';
+
+import { RenderWithRouter } from '../tests/helpers/RenderWithRouter';
+import Users from './Users';
 
 jest.mock('axios');
 
@@ -26,11 +28,26 @@ describe('Users', () => {
         };
     });
 
-    test('1', async () => {
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    // test('1', async () => {
+    //     axios.get.mockReturnValue(response);
+    //     render(<Users />);
+    //     const users = await screen.findAllByTestId('user-item');
+    //     expect(users.length).toBe(3);
+    //     expect(axios.get).toBeCalledTimes(1);
+    // });
+
+    test('2', async () => {
         axios.get.mockReturnValue(response);
-        render(<Users />);
+
+        render(RenderWithRouter(<Users />));
+
         const users = await screen.findAllByTestId('user-item');
+
         expect(users.length).toBe(3);
-        expect(axios.get).toBeCalledTimes(1);
+        expect(users[0]).toHaveAttribute('href', '/users/1');
     });
 });
